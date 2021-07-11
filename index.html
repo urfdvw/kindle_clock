@@ -62,8 +62,9 @@
         var date = new Date()
         var date_text = String(date).split(' ')
 
-        var timeString = date_text[4]
-        var dateString = date_text.slice(1, 4).join(',')
+        var timeString = date_text[4].slice(0,-3)
+        // var dateString = date_text.slice(1, 4).join(',')
+        var dateString = date_text[5]
         var weekString = date_text[0]
 
         document.getElementById("time").innerHTML = timeString
