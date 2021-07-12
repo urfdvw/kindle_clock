@@ -1,79 +1,95 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset="utf-8"/>
-    <title>　</title>
+  <meta charset="utf-8" />
+  <title>　</title>
 
-    <style>
-        body {
-          color: #000000;
-          background-color: #ffffff;
-        }
+  <style>
+    body {
+      color: #000000;
+      background-color: #ffffff;
+    }
 
-        .page {
-          position: fixed;
-          width: 100%;
-          height: 100%;
-        }
+    .page {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+    }
 
-        .time_container,
-        .date_container {
-          width: 100%;
-          margin: auto;
-          text-align: center;
-        }
+    .time_container,
+    .date_container {
+      width: 100%;
+      margin: auto;
+      text-align: center;
+    }
 
-        .time_container {
-          top: 0;
-          height: 55%;
-        }
+    .time_container {
+      top: 0;
+      height: 55%;
+    }
 
-        .date_container {
+    .date_container {}
 
-        }
+    .time {
+      padding-top: 5%;
+      font-size: 16rem;
+    }
 
-        .time {
-          padding-top: 120px;
-          font-size: 16rem;
-        }
-
-        .date {
-          padding-top: 40px;
-          font-size: 6rem;
-        }
-    </style>
+    .date {
+      padding-top: 5px;
+      font-size: 6rem;
+    }
+  </style>
 </head>
 
 <body>
-    <div class="page">
-      <div class="time_container">
-          <div class="time" id="time"></div>
-      </div>
-
-      <div class="date_container">
-          <div class="date" id="date"></div>
-          <div class="date" id="week"></div>
-      </div>
+  <div class="page">
+    <div class="time_container">
+      <div class="time" id="time"></div>
     </div>
 
+    <div class="date_container">
+      <div class="date" id="week"></div>
+      <div class="date" id="date"></div>
+      <div class="date" id="zone" onclick="change_zone()"></div>
+    </div>
+  </div>
 
-    <script>
-      function update() {
-        var date = new Date()
-        var date_text = String(date).split(' ')
 
-        var timeString = date_text[4].slice(0,-3)
-        // var dateString = date_text.slice(1, 4).join(',')
-        var dateString = date_text[5]
-        var weekString = date_text[0]
+  <script>
+    var zone = -4
 
-        document.getElementById("time").innerHTML = timeString
-        document.getElementById("date").innerHTML = dateString
-        document.getElementById("week").innerHTML = weekString
+    function change_zone() {
+      zone -= 1
+      if (zone == -12) {
+        zone = +12
       }
-
       update()
-      setInterval("update()", 1000)
-    </script>
+    }
+
+    function update() {
+
+      var date = new Date()
+      var utc8DiffMinutes = date.getTimezoneOffset() + zone * 60
+      date.setMinutes(date.getMinutes() + utc8DiffMinutes)
+      var date_text = String(date).split(' ')
+
+      // var dateString = date_text.slice(1, 4).join(',')
+
+      document.getElementById("time").innerHTML = date_text[4].slice(0, -3)
+      document.getElementById("week").innerHTML = date_text[0]
+      document.getElementById("date").innerHTML = date_text.slice(1, 4).join(',')
+      document.getElementById("zone").innerHTML = "GMT"
+      if (zone >= 0) {
+        document.getElementById("zone").innerHTML += '+'
+      }
+      document.getElementById("zone").innerHTML += String(zone)
+    }
+
+    update()
+    setInterval("update()", 1000)
+  </script>
 </body>
+
 </html>
